@@ -10,11 +10,12 @@
       <h2>{{ pergunta.texto_formatado|safe }}</h2>
       {% if pergunta.imagem %}
         <img src="{{ pergunta.imagem.url }}" alt="Imagem da pergunta">
-        <br>
-        <br>
+        </br>
+        </br>
+        </br>
       {% endif %}
       {% for resposta in pergunta.resposta_set.all %}
-        <label>
+        <label class="resposta">
           <input type="checkbox" name="{{ pergunta.id }}" id="resposta-{{ pergunta.id }}-{{ resposta.id }}" value="{{ resposta.id }}">
           {% if resposta.correta %}
             <span class="resposta-label correta"
