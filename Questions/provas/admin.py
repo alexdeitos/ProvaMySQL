@@ -7,6 +7,7 @@ class RespostaInline(admin.TabularInline):
 
 class PerguntaAdmin(admin.ModelAdmin):
     inlines = [RespostaInline]
+    ordering = ['id']  # Ordena pelo campo 'id', que representa a ordem de criação
 
 admin.site.register(Pergunta, PerguntaAdmin)
 
