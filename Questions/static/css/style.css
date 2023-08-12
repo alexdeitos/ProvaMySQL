@@ -52,6 +52,7 @@ form {
 }
 
 form h2 {
+  font-size: 20px; /* Increase the font size for questions */
   margin-bottom: 10px;
 }
 
@@ -62,11 +63,18 @@ form img {
 
 form label {
   display: block;
-  margin-bottom: 5px;
+  margin-bottom: 0px;
 }
 
-form .resposta-label {
+form span.resposta-label {
   margin-left: 10px;
+  font-size: 15px; /* Set font size for answers */
+  line-height: 1; /* Adjust line height for answers */
+  padding: -5px;
+}
+
+form label span {
+  margin-bottom: 0;
 }
 
 form button {
