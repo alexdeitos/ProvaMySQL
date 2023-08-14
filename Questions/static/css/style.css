@@ -100,3 +100,28 @@ footer p{
   }
 }
 
+/* Restante das regras CSS... */
+
+/* Ajuste para perguntas com mais de 30 palavras */
+.fonte-pequena {
+  font-size: 12px;
+  line-height: 1; /* Remove o espaçamento entre linhas */
+}
+
+/* Ajuste geral para respostas */
+form label span.resposta-label {
+  margin-left: 10px;
+  font-size: 15px; /* Tamanho de fonte padrão para respostas */
+  line-height: 1.2; /* Remove o espaçamento entre linhas */
+}
+
+/* Media query para telas menores */
+@media (max-width: 600px) {
+  /* Restante das regras CSS... */
+
+  /* Ajuste para perguntas com mais de 30 palavras em telas menores */
+  .fonte-pequena {
+    font-size: 13px;
+  }
+}
+
