@@ -69,7 +69,7 @@ form label {
 form span.resposta-label {
   margin-left: 10px;
   font-size: 15px; /* Set font size for answers */
-  line-height: 1; /* Adjust line height for answers */
+  line-height: 1.5; /* Adjust line height for answers */
   padding: -5px;
 }
 
@@ -78,7 +78,10 @@ form label span {
 }
 
 form button {
-  margin-top: 20px;
+  font-size: 18px;
+  padding: 15px 0; /* Adjust padding for vertical spacing */
+  width: 100%; /* Make the button occupy the full width of the container */
+  box-sizing: border-box; /* Include padding in button width */
 }
 
 footer p{
@@ -105,14 +108,14 @@ footer p{
 /* Ajuste para perguntas com mais de 30 palavras */
 .fonte-pequena {
   font-size: 12px;
-  line-height: 1; /* Remove o espaçamento entre linhas */
+  line-height: 1.5; /* Remove o espaçamento entre linhas */
 }
 
 /* Ajuste geral para respostas */
 form label span.resposta-label {
   margin-left: 10px;
   font-size: 15px; /* Tamanho de fonte padrão para respostas */
-  line-height: 1.2; /* Remove o espaçamento entre linhas */
+  line-height: 1.5; /* Remove o espaçamento entre linhas */
 }
 
 /* Media query para telas menores */
@@ -125,3 +128,25 @@ form label span.resposta-label {
   }
 }
 
+/* Existing CSS code */
+
+/* Add a media query for screen widths up to 600px */
+@media (max-width: 600px) {
+  /* Increase font size by 1px */
+  h2 {
+    font-size: 21px;
+  }
+
+  /* Increase font size for answers by 1px */
+  span.resposta-label {
+    font-size: 16px;
+  }
+
+  /* Increase button size for better usability on mobile devices */
+  form button {
+    font-size: 18px;
+    padding: 15px 0; /* Adjust padding for vertical spacing */
+    width: 100%; /* Make the button occupy the full width of the container */
+    box-sizing: border-box; /* Include padding in button width */
+  }
+}
