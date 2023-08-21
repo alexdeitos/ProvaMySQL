@@ -7,9 +7,11 @@
 </head>
 <body>
   <header>
-    <nav>
+    <nav class="show-nav">
       <ul>
         <li><a href="{% url 'index' %}">Home</a></li>
+        <li><a id="scroll-to-bottom">Ir para o final</a></li>
+        <li><a id="scroll-to-top">Ir para o Inicio</a></li>
         <li><a href="{% url 'admin:index' %}">Admin</a></li>
       </ul>
     </nav>
@@ -21,6 +23,28 @@
   <footer style="width: 100%; margin: 0 auto; display: block; text-align: center;">
     <p>&copy; AlexDeitos - 2023 - IZO-908</p>
   </footer>
+  <script>
+    const scrollToBottomBtn = document.getElementById('scroll-to-bottom');
+    scrollToBottomBtn.addEventListener('click', () => {
+      window.scrollTo(0, document.body.scrollHeight);
+    });
+    const scrollToTopBtn = document.getElementById('scroll-to-top');
+    scrollToTopBtn.addEventListener('click', () => {
+    window.scrollTo(0, 0);
+    });
+
+    const header = document.querySelector('header');
+    const nav = document.querySelector('nav');
+
+    header.addEventListener('mouseenter', () => {
+    nav.classList.add('show-nav');
+    });
+
+    header.addEventListener('mouseleave', () => {
+    nav.classList.remove('show-nav');
+    });
+
+  </script>
 </body>
 </html>
 

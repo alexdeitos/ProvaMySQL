@@ -70,11 +70,20 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'exams.wsgi.application'
-
-
+"""
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'django',
+        'USER': 'root',
+        'PASSWORD': 'root',
+        'HOST': 'db',  # ou o host do seu servidor MySQL
+        'PORT': '3306',  # porta padrão do MySQL (3306)
+    }
+}
+"""
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

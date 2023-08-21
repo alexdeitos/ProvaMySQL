@@ -36,7 +36,6 @@
     <button type="submit" id="enviar-respostas">Enviar Respostas</button>
     <button type="button" id="limpar-respostas">Limpar</button>
   </form>
-
   <script>
     const enviarRespostasBtn = document.getElementById('enviar-respostas');
     enviarRespostasBtn.addEventListener('click', validarRespostas);
@@ -62,7 +61,7 @@
       const perguntasRespondidas = respostasMarcadas.length + respostasCorretas.length;
       const perguntasCorretas = respostasCorretas.length;
   
-      alert(`Você acertou ${perguntasCorretas} de um total de ${perguntasRespondidas} perguntas.`);
+      
     }
   
     function limparRespostas(event) {
@@ -74,6 +73,7 @@
       });
     }
   </script>
+ 
   
 {% endblock %}
 
