@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Pergunta, Resposta
+from .models import Pergunta, Resposta, Prova
 
 class RespostaInline(admin.TabularInline):
     model = Resposta
@@ -7,27 +7,15 @@ class RespostaInline(admin.TabularInline):
 
 class PerguntaAdmin(admin.ModelAdmin):
     inlines = [RespostaInline]
-    
-    # Adicione uma barra de pesquisa para procurar pelo ID da pergunta
     search_fields = ['id', 'texto']
-    
-    # Liste as perguntas com os campos ID e texto da pergunta
-    list_display = ['id', 'texto']
+    list_display = ['get_nome_prova', 'texto']
+    ordering = ['prova__nome', 'id']  # Adicionando ordenação por nome da prova e ID
+
+    def get_nome_prova(self, obj):
+        return obj.prova.nome
+
+    get_nome_prova.short_description = 'Nome da Prova'
 
 admin.site.register(Pergunta, PerguntaAdmin)
+admin.site.register(Prova)
 
-
-"""
-from django.contrib import admin
-from .models import Pergunta, Resposta
-
-class RespostaInline(admin.TabularInline):
-    model = Resposta
-    extra = 4
-
-class PerguntaAdmin(admin.ModelAdmin):
-    inlines = [RespostaInline]
-#    ordering = ['id']  # Ordena pelo campo 'id', que representa a ordem de criação
-
-admin.site.register(Pergunta, PerguntaAdmin)
-"""

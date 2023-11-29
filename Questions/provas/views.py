@@ -1,7 +1,21 @@
-from django.shortcuts import render
-from .models import Pergunta
+from django.urls import reverse
+from django.shortcuts import render, redirect
+from .models import Pergunta, Prova
+from .forms import ProvaSelectForm
 
 def index(request):
-    perguntas = Pergunta.objects.all()
-    return render(request, 'index.html', {'perguntas': perguntas})
+    if request.method == 'POST':
+        form = ProvaSelectForm(request.POST)
+        if form.is_valid():
+            prova_id = form.cleaned_data['prova'].id
+            url = reverse('exibir_prova', args=[prova_id])
+            return redirect(url)
+    else:
+        form = ProvaSelectForm()
 
+    return render(request, 'index.html', {'form': form})
+
+def exibir_prova(request, prova_id):
+    prova = Prova.objects.get(id=prova_id)
+    perguntas = Pergunta.objects.filter(prova=prova)
+    return render(request, 'exibir_prova.html', {'prova': prova, 'perguntas': perguntas})
