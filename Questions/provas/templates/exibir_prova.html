@@ -5,133 +5,148 @@
 {% block title %}Perguntas e Respostas{% endblock %}
 
 {% block content %}
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
+<style>
+  body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+  }
 
-    .container {
-      max-width: 800px;
-      margin: 0 auto;
-      margin-top: 50px;
-    }
+  .container {
+    max-width: 800px;
+    margin: 0 auto;
+    margin-top: 50px;
+  }
 
-    h1 {
-      text-align: center;
-    }
+  h1 {
+    text-align: center;
+  }
 
-    #formulario-respostas {
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-top: 20px;
-    }
+  #formulario-respostas {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+  }
 
-    .pergunta {
-      margin-top: 10px;
-    }
+  .pergunta {
+    margin-top: 10px;
+  }
 
-    img {
-      max-width: 100%;
-      height: auto;
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
+  img {
+    max-width: 100%;
+    height: auto;
+    margin-top: 10px;
+    margin-bottom: 10px;
+  }
 
-    .resposta {
-      margin-top: 10px;
-    }
+  .resposta {
+    margin-top: 10px;
+  }
 
-    label {
-      display: flex;
-      align-items: center; /* Alinha os itens verticalmente no centro */
-      margin-bottom: 5px;
-    }
+  label {
+    display: flex;
+    align-items: center;
+    /* Alinha os itens verticalmente no centro */
+    margin-bottom: 5px;
+  }
 
-    .resposta-label {
-      cursor: pointer;
-      flex: 1; /* Ocupa o restante do espaço disponível */
-      display: block;
-      padding: 0px;
-      border-radius: 4px;
-      box-sizing: border-box;
-	  left:20px;
-    }
+  .resposta-label {
+    cursor: pointer;
+    flex: 1;
+    /* Ocupa o restante do espaço disponível */
+    display: block;
+    padding: 0px;
+    border-radius: 4px;
+    box-sizing: border-box;
+    left: 20px;
+  }
 
-    #enviar-respostas,
-    #limpar-respostas {
-      background-color: #4caf50;
-      color: #fff;
-      padding: 10px;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-      margin-top: 20px;
-      width: 100%;
-    }
+  #enviar-respostas,
+  #limpar-respostas {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    margin-top: 20px;
+    width: 100%;
+  }
 
-    #enviar-respostas:hover,
-    #limpar-respostas:hover {
-      background-color: #45a049;
-    }
-  </style>
+  #enviar-respostas:hover,
+  #limpar-respostas:hover {
+    background-color: #45a049;
+  }
+</style>
 
-  <div class="container">
-    <h1>{{ prova.nome }}</h1>
-    <form method="post" id="formulario-respostas">
-      {% csrf_token %}
-      {% for pergunta in perguntas %}
-        {% with num_palavras=pergunta.texto_formatado|wordcount %}
-          <div class="pergunta {% if num_palavras > 30 %}fonte-pequena{% endif %}" id="pergunta-{{ pergunta.id }}">
-            <h2>{{ pergunta.texto_formatado|safe }}</h2>
-          </div>
-        {% endwith %}
+<div class="container">
+  <h1>{{ prova.nome }}</h1>
+  <form method="post" id="formulario-respostas">
+    {% csrf_token %}
+    {% for pergunta in perguntas %}
+    {% with num_palavras=pergunta.texto_formatado|wordcount %}
+    <div class="pergunta {% if num_palavras > 30 %}fonte-pequena{% endif %}" id="pergunta-{{ pergunta.id }}">
+      <h2>{{ pergunta.texto_formatado|safe }}</h2>
+    </div>
+    {% endwith %}
 
-        {% if pergunta.imagem %}
-          <img src="{{ pergunta.imagem.url }}" alt="Imagem da pergunta">
-        {% endif %}
-        
-        {% for resposta in pergunta.resposta_set.all %}
-          <div class="resposta" id="resposta-{{ pergunta.id }}-{{ resposta.id }}">
-            <label>
-              <input type="checkbox" name="{{ pergunta.id }}" value="{{ resposta.id }}" {% if resposta.correta %}data-correta="true"{% endif %}>
-              <span id="resposta-label-{{ pergunta.id }}-{{ resposta.id }}" class="resposta-label {% if resposta.correta %}correta{% endif %}">{{ resposta.texto_formatado|safe }}</span>
-            </label>
-          </div>
-        {% endfor %}
-        <hr>
-      {% endfor %}
-      <button type="button" id="enviar-respostas">Enviar Respostas</button>
-      <button type="button" id="limpar-respostas">Limpar Respostas</button>
-    </form>
+    {% if pergunta.imagem %}
+    <img src="{{ pergunta.imagem.url }}" alt="Imagem da pergunta">
+    {% endif %}
 
-    <!-- Incorporar o código JavaScript diretamente -->
-    <script>
+    {% for resposta in pergunta.resposta_set.all %}
+    <div class="resposta" id="resposta-{{ pergunta.id }}-{{ resposta.id }}">
+      <label>
+        <input type="checkbox" name="{{ pergunta.id }}" value="{{ resposta.id }}"
+          {% if resposta.correta %}data-correta="true" {% endif %}>
+        <span id="resposta-label-{{ pergunta.id }}-{{ resposta.id }}"
+          class="resposta-label {% if resposta.correta %}correta{% endif %}">{{ resposta.texto_formatado|safe }}</span>
+      </label>
+    </div>
+    {% endfor %}
+    <hr>
+    {% endfor %}
+    <button type="button" id="enviar-respostas">Enviar Respostas</button>
+    <button type="button" id="limpar-respostas">Limpar Respostas</button>
+  </form>
+
+  <!-- Incorporar o código JavaScript diretamente -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let perguntasIncorretas = 0; // Adicione uma variável de contador
+
       const enviarRespostasBtn = document.getElementById('enviar-respostas');
       enviarRespostasBtn.addEventListener('click', validarRespostas);
-    
+
       const limparRespostasBtn = document.getElementById('limpar-respostas');
       limparRespostasBtn.addEventListener('click', limparRespostas);
-    
+
       function validarRespostas() {
         const respostasMarcadas = document.querySelectorAll('input[type="checkbox"]:checked');
         const respostasCorretas = document.querySelectorAll('.resposta-label.correta');
-    
+
         respostasMarcadas.forEach(resposta => {
           const respostaLabel = document.getElementById(`resposta-label-${resposta.name}-${resposta.value}`);
           respostaLabel.style.color = 'red';
+          // Incrementa o contador se a resposta marcada estiver errada
+          if (!resposta.getAttribute('data-correta')) {
+            perguntasIncorretas++;
+          }
         });
-    
+
         respostasCorretas.forEach(respostaCorreta => {
           respostaCorreta.style.color = 'green';
         });
+
+        // Adicione esta linha para exibir um alerta ao enviar as respostas
+        alert(`Você errou ${perguntasIncorretas} pergunta(s).`);
       }
-    
+
       function limparRespostas() {
+        perguntasIncorretas = 0; // Reinicia o contador ao limpar as respostas
         const respostas = document.querySelectorAll('input[type="checkbox"]');
         respostas.forEach(resposta => {
           resposta.checked = false;
@@ -139,6 +154,7 @@
           respostaLabel.style.color = '';
         });
       }
-    </script>
-  </div>
+    });
+  </script>
+</div>
 {% endblock %}
