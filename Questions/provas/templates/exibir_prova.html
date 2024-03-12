@@ -205,7 +205,12 @@
       padding: 20px;
     }
   }
-  
+  .resposta-label{
+      padding: 0px;
+      margin: 0;
+      font-size: 100px;
+      color: rgb(14, 14, 88);
+    }
   </style>
 
 <div class="container">
@@ -228,7 +233,7 @@
       <label>
         <input type="checkbox" name="{{ pergunta.id }}" value="{{ resposta.id }}"
           {% if resposta.correta %}data-correta="true" {% endif %}>
-        <span id="resposta-label-{{ pergunta.id }}-{{ resposta.id }}"
+        <span style="font-size:20px;line-height: 1.2;" id="resposta-label-{{ pergunta.id }}-{{ resposta.id }}"
           class="resposta-label {% if resposta.correta %}correta{% endif %}">{{ resposta.texto_formatado|safe }}</span>
       </label>
     </div>
@@ -274,7 +279,7 @@
       });
 
       respostasCorretas.forEach(respostaCorreta => {
-        respostaCorreta.style.color = 'green';
+        respostaCorreta.style.color = 'blue';
       });
 
       // Adicione esta linha para exibir um alerta ao enviar as respostas
