@@ -8,9 +8,11 @@
   <script type="text/javascript" src="{% static  'js/scripts.js' %}"></script>
   <style>
     /* Personalize a altura da navbar */
-    .navbar {
-      padding-top: 10px; /* Reduza o padding superior */
-      padding-bottom: 10px; /* Reduza o padding inferior */
+    .py-4 {
+      margin-top: 170px;
+      /* Ajuste conforme necessário */
+      display: block;
+      box-sizing: content-box;
     }
   </style>
 </head>
@@ -55,13 +57,13 @@
     const header = document.querySelector('header');
     const nav = document.querySelector('nav');
 
-/*    header.addEventListener('mouseenter', () => {
-      nav.classList.add('show-nav');
-    });
+    /*    header.addEventListener('mouseenter', () => {
+          nav.classList.add('show-nav');
+        });
 
-    header.addEventListener('mouseleave', () => {
-      nav.classList.remove('show-nav');
-    });*/
+        header.addEventListener('mouseleave', () => {
+          nav.classList.remove('show-nav');
+        });*/
     document.addEventListener('DOMContentLoaded', function () {
       document.getElementById('enviar-respostas').addEventListener('click', function () {
         marcarRespostas();
