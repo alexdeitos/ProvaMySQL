@@ -6,8 +6,8 @@
 
 {% block content %}
 <div class="container">
-  <h1>{{ prova.nome }}</h1>
-  <form method="post" id="formulario-respostas">
+  <h1 class="row col-10 mx-auto titulo-prova">{{ prova.nome }}</h1>
+  <form method="post" id="formulario-respostas" class="row col-11 mx-auto prova">
     {% csrf_token %}
     {% for pergunta in perguntas %}
     {% with num_palavras=pergunta.texto_formatado|wordcount %}
@@ -30,66 +30,70 @@
       </label>
     </div>
     {% endfor %}
-    <hr>
+    <hr class="break-line">
     {% endfor %}
-    <button class="btn btn-success align-self-center mr-3" type="button" id="enviar-respostas">Enviar Respostas</button>
-    <button class="btn btn-success align-self-center mr-3" type="button" id="limpar-respostas">Limpar Respostas</button>
+    <button class="conf-prova btn btn-success align-self-center mr-3 col-8 mx-auto" type="button"
+      id="enviar-respostas">Enviar Respostas</button>
+    <button class="conf-prova btn btn-success align-self-center mr-3 col-8 mx-auto" type="button"
+      id="limpar-respostas">Limpar Respostas</button>
   </form>
 
-<!-- Incorporar o código JavaScript diretamente -->
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-    let perguntasIncorretas = 0; // Adicione uma variável de contador
-    const totalPerguntas = {{ perguntas|length }}; // Adicione o número total de perguntas
-
-    const enviarRespostasBtn = document.getElementById('enviar-respostas');
-    enviarRespostasBtn.addEventListener('click', validarRespostas);
-
-    const limparRespostasBtn = document.getElementById('limpar-respostas');
-    limparRespostasBtn.addEventListener('click', limparRespostas);
-
-    function validarRespostas() {
-      const respostasMarcadas = document.querySelectorAll('input[type="checkbox"]:checked');
-      const respostasCorretas = document.querySelectorAll('.resposta-label.correta');
-
-      let perguntasIncorretasPerguntas = new Set(); // Conjunto de perguntas já contadas como incorretas
-
-      respostasMarcadas.forEach(resposta => {
-        const perguntaId = resposta.name;
-        const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
-
-        // Verifica se a pergunta já foi contada como incorreta
-        if (!perguntasIncorretasPerguntas.has(perguntaId)) {
-          respostaLabel.style.color = 'red';
-
-          // Incrementa o contador apenas uma vez por pergunta
-          if (!resposta.getAttribute('data-correta')) {
+  <!-- Incorporar o código JavaScript diretamente -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let perguntasCorretas = 0;
+      let perguntasIncorretas = 0;
+  
+      const enviarRespostasBtn = document.getElementById('enviar-respostas');
+      enviarRespostasBtn.addEventListener('click', validarRespostas);
+  
+      const limparRespostasBtn = document.getElementById('limpar-respostas');
+      limparRespostasBtn.addEventListener('click', limparRespostas);
+  
+      function validarRespostas() {
+        const respostasMarcadas = document.querySelectorAll('input[type="checkbox"]:checked');
+  
+        respostasMarcadas.forEach(resposta => {
+          const perguntaId = resposta.name;
+          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
+  
+          if (resposta.getAttribute('data-correta')) {
+            respostaLabel.style.color = 'blue'; // Marca a resposta como correta (azul)
+            perguntasCorretas++;
+          } else {
+            respostaLabel.style.color = 'red'; // Marca a resposta como incorreta (vermelha)
             perguntasIncorretas++;
-            perguntasIncorretasPerguntas.add(perguntaId);
           }
-        }
-      });
-
-      respostasCorretas.forEach(respostaCorreta => {
-        respostaCorreta.style.color = 'blue';
-      });
-
-      // Adicione esta linha para exibir um alerta ao enviar as respostas
-      if (perguntasIncorretas > 0) {
-        alert(`Você errou ${perguntasIncorretas} pergunta(s).`);
+        });
+  
+        exibirAlerta();
       }
-    }
-
-    function limparRespostas() {
-      perguntasIncorretas = 0; // Reinicia o contador ao limpar as respostas
-      const respostas = document.querySelectorAll('input[type="checkbox"]');
-      respostas.forEach(resposta => {
-        resposta.checked = false;
-        const respostaLabel = document.getElementById(`resposta-label-${resposta.name}-${resposta.value}`);
-        respostaLabel.style.color = '';
-      });
-    }
-  });
-</script> 
+  
+      function limparRespostas() {
+        perguntasCorretas = 0;
+        perguntasIncorretas = 0;
+  
+        const respostas = document.querySelectorAll('input[type="checkbox"]');
+        respostas.forEach(resposta => {
+          resposta.checked = false;
+          const perguntaId = resposta.name;
+          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
+          respostaLabel.style.color = '';
+        });
+      }
+  
+      function exibirAlerta() {
+        const totalPerguntas = {{ perguntas | length }};
+        const perguntasRespondidas = perguntasCorretas + perguntasIncorretas;
+        const perguntasNaoRespondidas = totalPerguntas - perguntasRespondidas;
+  
+        let mensagem = `Você respondeu corretamente ${perguntasCorretas} pergunta(s).\n`;
+        mensagem += `Você respondeu incorretamente ${perguntasIncorretas} pergunta(s).\n`;
+        mensagem += `Você não respondeu ${perguntasNaoRespondidas} pergunta(s).`;
+  
+        alert(mensagem);
+      }
+    });
+  </script>
 </div>
 {% endblock %}

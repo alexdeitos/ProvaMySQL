@@ -1,7 +1,7 @@
 from django.db import models
 
 class Prova(models.Model):
-    nome = models.CharField(max_length=255)
+    nome = models.CharField(max_length=300)
 
     def __str__(self):
         return self.nome
@@ -19,7 +19,7 @@ class Pergunta(models.Model):
 
 class Resposta(models.Model):
     pergunta = models.ForeignKey(Pergunta, on_delete=models.CASCADE)
-    texto = models.CharField(max_length=300)
+    texto = models.CharField(max_length=500)
     correta = models.BooleanField(default=False)
 
     def __str__(self):

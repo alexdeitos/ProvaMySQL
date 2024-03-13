@@ -1,22 +1,49 @@
 /* Seu CSS personalizado aqui */
 
 .resposta-correta label {
-  color: blue !important; /* Define a cor azul para respostas corretas */
+  color: blue !important;
+  /* Define a cor azul para respostas corretas */
 }
 
 .resposta-incorreta label {
-  color: red !important; /* Define a cor vermelha para respostas incorretas */
+  color: red !important;
+  /* Define a cor vermelha para respostas incorretas */
 }
 
 .py-4 {
-  margin-top: 170px; /* Ajuste conforme necessário */
-  display: block;
-  box-sizing: content-box;
+  margin-top: 170px;
+  /* Ajuste conforme necessário */
 }
 
-.jason{
+.jason {
   font-size: 15px;
   line-height: 1;
   color: black;
   font-weight: bold;
+}
+
+.titulo-prova {
+  font-weight: bold;
+  margin-bottom: 30px;
+  box-shadow: 2px 2px 8px black;
+  border-radius: 10px;
+}
+
+.titulo-prova h1 {
+  margin: 0 auto;
+}
+
+.prova {
+  box-shadow: 2px 2px 8px black;
+  border-radius: 10px;
+}
+
+.break-line {
+  margin-top: 8px;
+  margin-bottom: 8px;
+ }
+
+.conf-prova {
+  margin-top: 10px;
+  padding: 10px;
 }
