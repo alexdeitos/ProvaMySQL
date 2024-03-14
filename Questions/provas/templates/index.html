@@ -3,71 +3,16 @@
 {% block title %}Perguntas e Respostas{% endblock %}
 
 {% block content %}
-  <style>
-    body {
-      font-family: 'Arial', sans-serif;
-      background-color: #f4f4f4;
-      margin: 0;
-      padding: 0;
-    }
-
-    .container {
-      max-width: 600px;
-      margin: 0 auto;
-      background-color: #fff;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      margin-top: 50px;
-    }
-
-    h1 {
-      text-align: center;
-    }
-
-    .form {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-
-    label {
-      margin-bottom: 12px; /* Aumentando o margin para adicionar mais espaço */
-      font-size: 18px; /* Aumentando o tamanho da fonte */
-    }
-
-    select {
-      width: 100%;
-      padding: 12px; /* Aumentando o padding */
-      margin-bottom: 16px;
-      box-sizing: border-box;
-      font-size: 16px; /* Aumentando o tamanho da fonte */
-    }
-
-    button {
-      background-color: #4caf50;
-      color: #fff;
-      padding: 12px; /* Aumentando o padding */
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
-    }
-
-    button:hover {
-      background-color: #45a049;
-    }
-
-    label{
-      visibility: hidden;
-    }
-  </style>
-
-  <div class="container">
-    <h1>Escolha a prova</h1>
-    <form method="post" class="form">
-      {% csrf_token %}
-      {{ form.as_p }}
-      <button type="submit">Selecionar Prova</button>
-    </form>
+  <div class="container mt-12 d-flex justify-content-center"> <!-- Adiciona classe d-flex e justify-content-center -->
+    <div class="row">
+      <div class="col-12">
+        <h1 class="text-center col-12">Escolha a prova</h1>
+        <form method="post" class="form">
+          {% csrf_token %}
+          {{ form.as_p }}
+          <button type="submit" class="btn btn-primary col-12">Selecionar Prova</button>
+        </form>
+      </div>
+    </div>
   </div>
 {% endblock %}
