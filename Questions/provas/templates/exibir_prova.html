@@ -1,5 +1,4 @@
 {% extends 'base.html' %}
-
 {% load static %}
 
 {% block title %}Perguntas e Respostas{% endblock %}
@@ -45,13 +44,14 @@
     document.addEventListener('DOMContentLoaded', function () {
       let perguntasCorretas = 0;
       let perguntasIncorretas = 0;
-  
+      let perguntasNaoRespondidas = 0;
+
       const enviarRespostasBtn = document.getElementById('enviar-respostas');
       enviarRespostasBtn.addEventListener('click', validarRespostas);
-  
+
       const limparRespostasBtn = document.getElementById('limpar-respostas');
       limparRespostasBtn.addEventListener('click', limparRespostas);
-      
+
       const marcarCorretasBtn = document.getElementById('marcar-corretas');
       marcarCorretasBtn.addEventListener('click', marcarRespostasCorretas);
 
@@ -63,36 +63,15 @@
           if (resposta.getAttribute('data-correta')) {
             resposta.checked = true;
             respostaLabel.style.color = 'blue';
-          } else {
-            resposta.checked = false;
-            respostaLabel.style.color = '';
           }
         });
       }
 
-      function validarRespostas() {
-        const respostasMarcadas = document.querySelectorAll('input[type="checkbox"]:checked');
-  
-        respostasMarcadas.forEach(resposta => {
-          const perguntaId = resposta.name;
-          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
-  
-          if (resposta.getAttribute('data-correta')) {
-            respostaLabel.style.color = 'blue'; // Marca a resposta como correta (azul)
-            perguntasCorretas++;
-          } else {
-            respostaLabel.style.color = 'red'; // Marca a resposta como incorreta (vermelha)
-            perguntasIncorretas++;
-          }
-        });
-  
-        exibirAlerta();
-      }
-  
       function limparRespostas() {
         perguntasCorretas = 0;
         perguntasIncorretas = 0;
-  
+        perguntasNaoRespondidas = 0;
+
         const respostas = document.querySelectorAll('input[type="checkbox"]');
         respostas.forEach(resposta => {
           resposta.checked = false;
@@ -101,16 +80,41 @@
           respostaLabel.style.color = '';
         });
       }
-  
-      function exibirAlerta() {
-        const totalPerguntas = {{ perguntas | length }};
-        const perguntasRespondidas = perguntasCorretas + perguntasIncorretas;
-        const perguntasNaoRespondidas = totalPerguntas - perguntasRespondidas;
-  
-        let mensagem = `Você respondeu corretamente ${perguntasCorretas} pergunta(s).\n`;
-        mensagem += `Você respondeu incorretamente ${perguntasIncorretas} pergunta(s).\n`;
-        mensagem += `Você não respondeu ${perguntasNaoRespondidas} pergunta(s).`;
-  
+
+      function validarRespostas() {
+        marcarRespostasCorretas(); // Marca as respostas corretas antes de validar
+
+        perguntasNaoRespondidas = 0;
+        perguntasCorretas = 0;
+        perguntasIncorretas = 0;
+
+        const totalPerguntas = document.querySelectorAll('.pergunta').length;
+        const respostasMarcadas = document.querySelectorAll('input[type="checkbox"]:checked');
+
+        respostasMarcadas.forEach(resposta => {
+          const perguntaId = resposta.name;
+          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
+
+          if (resposta.getAttribute('data-correta')) {
+            respostaLabel.style.color = 'blue'; // Marca a resposta como correta (azul)
+            perguntasCorretas++;
+          } else {
+            respostaLabel.style.color = 'red'; // Marca a resposta como incorreta (vermelha)
+            perguntasIncorretas++;
+            const respostasDaPergunta = document.querySelectorAll(`input[name="${perguntaId}"]`);
+            respostasDaPergunta.forEach(respostaCorreta => {
+              if (respostaCorreta.getAttribute('data-correta')) {
+                const respostaCorretaLabel = document.getElementById(`resposta-label-${perguntaId}-${respostaCorreta.value}`);
+                respostaCorretaLabel.style.color = 'blue'; // Marca a resposta correta como azul
+              }
+            });
+          }
+        });
+
+        perguntasNaoRespondidas = totalPerguntas - respostasMarcadas.length;
+        const mensagem = `Você respondeu corretamente ${perguntasCorretas} pergunta(s).\n`
+          + `Você respondeu incorretamente ${perguntasIncorretas} pergunta(s).\n`
+          + `Você não respondeu ${perguntasNaoRespondidas} pergunta(s).`;
         alert(mensagem);
       }
     });

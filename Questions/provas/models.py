@@ -19,7 +19,7 @@ class Pergunta(models.Model):
 
 class Resposta(models.Model):
     pergunta = models.ForeignKey(Pergunta, on_delete=models.CASCADE)
-    texto = models.CharField(max_length=500)
+    texto = models.CharField(max_length=800)
     correta = models.BooleanField(default=False)
 
     def __str__(self):
