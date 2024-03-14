@@ -36,6 +36,8 @@
       id="enviar-respostas">Enviar Respostas</button>
     <button class="conf-prova btn btn-success align-self-center mr-3 col-8 mx-auto" type="button"
       id="limpar-respostas">Limpar Respostas</button>
+    <button class="conf-prova btn btn-success align-self-center mr-3 col-8 mx-auto" type="button" 
+      id="marcar-corretas">Marcar Corretas</button>
   </form>
 
   <!-- Incorporar o código JavaScript diretamente -->
@@ -49,7 +51,25 @@
   
       const limparRespostasBtn = document.getElementById('limpar-respostas');
       limparRespostasBtn.addEventListener('click', limparRespostas);
-  
+      
+      const marcarCorretasBtn = document.getElementById('marcar-corretas');
+      marcarCorretasBtn.addEventListener('click', marcarRespostasCorretas);
+
+      function marcarRespostasCorretas() {
+        const respostas = document.querySelectorAll('input[type="checkbox"]');
+        respostas.forEach(resposta => {
+          const perguntaId = resposta.name;
+          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
+          if (resposta.getAttribute('data-correta')) {
+            resposta.checked = true;
+            respostaLabel.style.color = 'blue';
+          } else {
+            resposta.checked = false;
+            respostaLabel.style.color = '';
+          }
+        });
+      }
+
       function validarRespostas() {
         const respostasMarcadas = document.querySelectorAll('input[type="checkbox"]:checked');
   
