@@ -25,7 +25,7 @@
       <label>
         <input type="checkbox" name="{{ pergunta.id }}" value="{{ resposta.id }}"
           {% if resposta.correta %}data-correta="true" {% endif %}>
-        <span style="font-size:20px;line-height: 1.2;" id="resposta-label-{{ pergunta.id }}-{{ resposta.id }}"
+        <span style="font-size:25px;line-height: 1.2;" id="resposta-label-{{ pergunta.id }}-{{ resposta.id }}"
           class="resposta-label {% if resposta.correta %}correta{% endif %}">{{ resposta.texto_formatado|safe }}</span>
       </label>
     </div>
