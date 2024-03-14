@@ -51,4 +51,12 @@
 
 div.pergunta{
   background-color: #e4e0e0;
+  border-radius: 3px;
+  box-shadow: 2px 2px 4px black; 
+  margin-bottom: 10px;
+}
+
+.m-0{
+  background-color: #ccc;
+  margin: 0 auto;
 }
