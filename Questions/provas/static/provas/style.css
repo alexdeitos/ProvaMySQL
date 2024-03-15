@@ -67,3 +67,7 @@ div.pergunta{
   border-radius: 3px;
   box-shadow: 2px 2px 2px black;
 }
+
+.btn {
+  margin-left: 5px;
+}

@@ -2,7 +2,12 @@
 {% load static %}
 
 {% block title %}Perguntas e Respostas{% endblock %}
-
+{% block nav %}
+<button class="btn btn-light" id="scroll-to-top">Início</button>
+<button class="btn btn-light" id="scroll-to-bottom">Final</button>
+<button class="btn btn-success" id="enviar-respostas">Enviar Respostas</button>
+<button class="btn btn-danger" id="limpar-respostas">Limpar Respostas</button>
+{% endblock %}
 {% block content %}
 <div class="container">
   <h1 class="row col-10 mx-auto titulo-prova">{{ prova.nome }}</h1>
@@ -31,12 +36,7 @@
     {% endfor %}
     <hr class="break-line">
     {% endfor %}
-    <button class="conf-prova btn btn-success align-self-center mr-3 col-8 mx-auto" type="button"
-      id="enviar-respostas">Enviar Respostas</button>
-    <button class="conf-prova btn btn-success align-self-center mr-3 col-8 mx-auto" type="button"
-      id="limpar-respostas">Limpar Respostas</button>
-    <button class="conf-prova btn btn-success align-self-center mr-3 col-8 mx-auto" type="button" 
-      id="marcar-corretas">Marcar Corretas</button>
+    
   </form>
 
   <!-- Incorporar o código JavaScript diretamente -->
