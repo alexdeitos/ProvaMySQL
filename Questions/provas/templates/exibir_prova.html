@@ -82,8 +82,6 @@
       }
 
       function validarRespostas() {
-        marcarRespostasCorretas(); // Marca as respostas corretas antes de validar
-
         perguntasNaoRespondidas = 0;
         perguntasCorretas = 0;
         perguntasIncorretas = 0;
@@ -116,6 +114,9 @@
           + `Você respondeu incorretamente ${perguntasIncorretas} pergunta(s).\n`
           + `Você não respondeu ${perguntasNaoRespondidas} pergunta(s).`;
         alert(mensagem);
+
+        // Marca as respostas corretas após o usuário ter visto o alerta
+        marcarRespostasCorretas();
       }
     });
   </script>
