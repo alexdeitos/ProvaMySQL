@@ -74,4 +74,5 @@ div.pergunta{
 
 .future{
   background-color: rgb(21, 21, 41);
+  opacity: 0.05;
 }
