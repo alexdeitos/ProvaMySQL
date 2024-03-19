@@ -8,119 +8,99 @@
 <button class="btn btn-light" id="scroll-to-bottom">Final</button>
 <button class="btn btn-success" id="enviar-respostas">Enviar Respostas</button>
 <button class="btn btn-danger" id="limpar-respostas">Limpar Respostas</button>
-<img src="{{ MEDIA_URL }}/media/media/future.webp" alt="future" class="img-fluid future" style="max-height: 50px;">
+<img src="{{ MEDIA_URL }}/media/media/future.webp" alt="future" class="img-fluid future" style="max-height: 50px;" id="future">
 {% endblock %}
 {% block content %}
 <div class="container">
   <h1 class="row col-10 mx-auto titulo-prova">{{ prova.nome }}</h1>
-  <form method="post" id="formulario-respostas" class="row col-11 mx-auto prova">
-    {% csrf_token %}
+  <div id="perguntas">
     {% for pergunta in perguntas %}
-    {% with num_palavras=pergunta.texto_formatado|wordcount %}
-    <div class="pergunta {% if num_palavras > 30 %}fonte-pequena{% endif %}" id="pergunta-{{ pergunta.id }}">
+    <div class="pergunta">
       <h2>{{ pergunta.texto_formatado|safe }}</h2>
-    </div>
-    {% endwith %}
-
-    {% if pergunta.imagem %}
-    <img src="{{ pergunta.imagem.url }}" alt="Imagem da pergunta">
-    {% endif %}
-
-    {% for resposta in pergunta.resposta_set.all %}
-    <div class="resposta" id="resposta-{{ pergunta.id }}-{{ resposta.id }}">
-      <label>
-        <input type="checkbox" name="{{ pergunta.id }}" value="{{ resposta.id }}"
-          {% if resposta.correta %}data-correta="true" {% endif %}>
-        <span style="font-size:25px;line-height: 1.2;" id="resposta-label-{{ pergunta.id }}-{{ resposta.id }}"
-          class="resposta-label {% if resposta.correta %}correta{% endif %}">{{ resposta.texto_formatado|safe }}</span>
-      </label>
+      <!-- Renderizar respostas -->
+      {% for resposta in pergunta.resposta_set.all %}
+      <div class="resposta">
+        <label>
+          <input type="checkbox" name="{{ pergunta.id }}" value="{{ resposta.id }}" {% if resposta.correta %}data-correta="true" {% endif %}>
+          <span style="font-size:25px;line-height: 1.2;" id="resposta-label-{{ pergunta.id }}-{{ resposta.id }}" class="resposta-label {% if resposta.correta %}correta{% endif %}">{{ resposta.texto_formatado|safe }}</span>
+        </label>
+      </div>
+      {% endfor %}
     </div>
     {% endfor %}
-    <hr class="break-line">
-    {% endfor %}
-    
-  </form>
-
-  <!-- Incorporar o código JavaScript diretamente -->
-  <script>
-    document.addEventListener('DOMContentLoaded', function () {
-      let perguntasCorretas = 0;
-      let perguntasIncorretas = 0;
-      let perguntasNaoRespondidas = 0;
-
-      const enviarRespostasBtn = document.getElementById('enviar-respostas');
-      enviarRespostasBtn.addEventListener('click', validarRespostas);
-
-      const limparRespostasBtn = document.getElementById('limpar-respostas');
-      limparRespostasBtn.addEventListener('click', limparRespostas);
-
-      const marcarCorretasBtn = document.getElementById('marcar-corretas');
-      marcarCorretasBtn.addEventListener('click', marcarRespostasCorretas);
-
-      function marcarRespostasCorretas() {
-        const respostas = document.querySelectorAll('input[type="checkbox"]');
-        respostas.forEach(resposta => {
-          const perguntaId = resposta.name;
-          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
-          if (resposta.getAttribute('data-correta')) {
-            resposta.checked = true;
-            respostaLabel.style.color = 'blue';
-          }
-        });
-      }
-
-      function limparRespostas() {
-        perguntasCorretas = 0;
-        perguntasIncorretas = 0;
-        perguntasNaoRespondidas = 0;
-
-        const respostas = document.querySelectorAll('input[type="checkbox"]');
-        respostas.forEach(resposta => {
-          resposta.checked = false;
-          const perguntaId = resposta.name;
-          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
-          respostaLabel.style.color = '';
-        });
-      }
-
-      function validarRespostas() {
-        perguntasNaoRespondidas = 0;
-        perguntasCorretas = 0;
-        perguntasIncorretas = 0;
-
-        const totalPerguntas = document.querySelectorAll('.pergunta').length;
-        const respostasMarcadas = document.querySelectorAll('input[type="checkbox"]:checked');
-
-        respostasMarcadas.forEach(resposta => {
-          const perguntaId = resposta.name;
-          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
-
-          if (resposta.getAttribute('data-correta')) {
-            respostaLabel.style.color = 'blue'; // Marca a resposta como correta (azul)
-            perguntasCorretas++;
-          } else {
-            respostaLabel.style.color = 'red'; // Marca a resposta como incorreta (vermelha)
-            perguntasIncorretas++;
-            const respostasDaPergunta = document.querySelectorAll(`input[name="${perguntaId}"]`);
-            respostasDaPergunta.forEach(respostaCorreta => {
-              if (respostaCorreta.getAttribute('data-correta')) {
-                const respostaCorretaLabel = document.getElementById(`resposta-label-${perguntaId}-${respostaCorreta.value}`);
-                respostaCorretaLabel.style.color = 'blue'; // Marca a resposta correta como azul
-              }
-            });
-          }
-        });
-
-        perguntasNaoRespondidas = totalPerguntas - respostasMarcadas.length;
-        const mensagem = `Você respondeu corretamente ${perguntasCorretas} pergunta(s).\n`
-          + `Você respondeu incorretamente ${perguntasIncorretas} pergunta(s).\n`
-          + `Você não respondeu ${perguntasNaoRespondidas} pergunta(s).`;
-        alert(mensagem);
-
-        // Marca as respostas corretas após o usuário ter visto o alerta
-        marcarRespostasCorretas();
-      }
-    });
-  </script>
+  </div>
+  <div class="text-center">
+    <button class="btn btn-primary" id="pergunta-anterior">Pergunta Anterior</button>
+    <button class="btn btn-primary" id="proxima-pergunta">Próxima Pergunta</button>
+    <button class="btn btn-success" id="validar-respostas">Validar Respostas</button>
+  </div>
 </div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+    const perguntas = document.querySelectorAll('.pergunta');
+    let perguntaAtual = 0;
+
+    function mostrarPergunta(indice) {
+        perguntas.forEach((pergunta, index) => {
+            if (index === indice) {
+                pergunta.style.display = 'block';
+            } else {
+                pergunta.style.display = 'none';
+            }
+        });
+    }
+
+    function mostrarPerguntaAtual() {
+        mostrarPergunta(perguntaAtual);
+    }
+
+    mostrarPerguntaAtual();
+
+    const proximaPerguntaBtn = document.getElementById('proxima-pergunta');
+    proximaPerguntaBtn.addEventListener('click', () => {
+        perguntaAtual = (perguntaAtual + 1) % perguntas.length;
+        mostrarPerguntaAtual();
+    });
+
+    const perguntaAnteriorBtn = document.getElementById('pergunta-anterior');
+    perguntaAnteriorBtn.addEventListener('click', () => {
+        perguntaAtual = (perguntaAtual - 1 + perguntas.length) % perguntas.length;
+        mostrarPerguntaAtual();
+    });
+
+    const validarRespostasBtn = document.getElementById('validar-respostas');
+    validarRespostasBtn.addEventListener('click', () => {
+        const respostasSelecionadas = perguntas[perguntaAtual].querySelectorAll('input[type="checkbox"]:checked');
+        const respostasCorretas = perguntas[perguntaAtual].querySelectorAll('input[type="checkbox"][data-correta="true"]');
+        const respostasIncorretas = Array.from(respostasSelecionadas).filter(resposta => !resposta.getAttribute('data-correta'));
+
+        respostasSelecionadas.forEach(resposta => {
+            const respostaLabel = document.getElementById(`resposta-label-${perguntaAtual}-${resposta.value}`);
+            if (resposta.getAttribute('data-correta')) {
+                respostaLabel.style.color = 'blue';
+            } else {
+                respostaLabel.style.color = 'red';
+            }
+        });
+
+        respostasCorretas.forEach(resposta => {
+            const respostaLabel = document.getElementById(`resposta-label-${perguntaAtual}-${resposta.value}`);
+            respostaLabel.style.color = 'blue';
+        });
+
+        respostasIncorretas.forEach(resposta => {
+            const respostaLabel = document.getElementById(`resposta-label-${perguntaAtual}-${resposta.value}`);
+            respostaLabel.style.color = 'red';
+        });
+
+        const todasRespostasCorretas = respostasSelecionadas.length === respostasCorretas.length && respostasIncorretas.length === 0;
+        const mensagem = todasRespostasCorretas ? 'Resposta correta!' : 'Resposta incorreta!';
+        alert(mensagem);
+    });
+
+});
+
+</script>
+
 {% endblock %}
