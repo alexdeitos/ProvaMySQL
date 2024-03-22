@@ -79,7 +79,9 @@ document.addEventListener('DOMContentLoaded', function () {
     }
 
     const limparRespostasBtn = document.getElementById('limpar-respostas');
+    const limparRespostasBtn1 = document.getElementById('limpar-respostas1');
     limparRespostasBtn.addEventListener('click', limparRespostas);
+    limparRespostasBtn1.addEventListener('click', limparRespostas);
 
     function limparRespostas() {
         const respostas = document.querySelectorAll('.resposta');
