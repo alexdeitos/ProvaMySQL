@@ -33,3 +33,14 @@ def exibir_prova(request, prova_id):
     }
 
     return render(request, 'exibir_prova.html', context)
+
+def resultados_prova(request):
+    corretas = request.GET.get('corretas')
+    incorretas = request.GET.get('incorretas')
+    nao_respondidas = request.GET.get('naoRespondidas')
+
+    return render(request, 'resultados.html', {
+        'corretas': corretas,
+        'incorretas': incorretas,
+        'nao_respondidas': nao_respondidas,
+    })

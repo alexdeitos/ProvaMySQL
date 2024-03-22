@@ -139,7 +139,7 @@ USE_TZ = True
 
 # URL base para servir arquivos estáticos
 STATIC_URL = '/static/'
-
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 # Diretórios onde o Django irá procurar arquivos estáticos
 STATICFILES_DIRS = [
     BASE_DIR / 'provas' / 'static',

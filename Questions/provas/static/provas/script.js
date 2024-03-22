@@ -1,55 +1,6 @@
 document.addEventListener('DOMContentLoaded', function () {
-    const scrollToBottomBtn = document.getElementById('scroll-to-bottom');
-    scrollToBottomBtn.addEventListener('click', () => {
-        window.scrollTo(0, document.body.scrollHeight);
-    });
-    const scrollToTopBtn = document.getElementById('scroll-to-top');
-    scrollToTopBtn.addEventListener('click', () => {
-        window.scrollTo(0, 0);
-    });
-    const UpdateFuture = document.getElementById('future');
-    UpdateFuture.addEventListener('click', () => {
-        window.location.reload();
-    });
-
-    let perguntasCorretas = 0;
-    let perguntasIncorretas = 0;
-    let perguntasNaoRespondidas = 0;
-
     const enviarRespostasBtn = document.getElementById('enviar-respostas');
     enviarRespostasBtn.addEventListener('click', validarRespostas);
-
-    const limparRespostasBtn = document.getElementById('limpar-respostas');
-    limparRespostasBtn.addEventListener('click', limparRespostas);
-
-    const marcarCorretasBtn = document.getElementById('marcar-corretas');
-    marcarCorretasBtn.addEventListener('click', marcarRespostasCorretas);
-
-    function marcarRespostasCorretas() {
-        const respostas = document.querySelectorAll('input[type="checkbox"]');
-        respostas.forEach(resposta => {
-            const perguntaId = resposta.name;
-            const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
-            if (resposta.getAttribute('data-correta')) {
-                resposta.checked = true;
-                respostaLabel.style.color = 'blue';
-            }
-        });
-    }
-
-    function limparRespostas() {
-        perguntasCorretas = 0;
-        perguntasIncorretas = 0;
-        perguntasNaoRespondidas = 0;
-
-        const respostas = document.querySelectorAll('input[type="checkbox"]');
-        respostas.forEach(resposta => {
-            resposta.checked = false;
-            const perguntaId = resposta.name;
-            const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
-            respostaLabel.style.color = '';
-        });
-    }
 
     function validarRespostas() {
         perguntasNaoRespondidas = 0;
@@ -87,5 +38,82 @@ document.addEventListener('DOMContentLoaded', function () {
 
         // Marca as respostas corretas após o usuário ter visto o alerta
         marcarRespostasCorretas();
+    }
+
+    document.getElementById('limpar-respostas').addEventListener('click', function () {
+        limparRespostas();
+    });
+
+    const btnMarcarRespostas = document.getElementById('marcar-respostas');
+
+    btnMarcarRespostas.addEventListener('click', function () {
+        marcarRespostas(); // Chama a função para marcar as respostas
+    });
+
+    function marcarRespostas() {
+        // Loop sobre todas as perguntas
+        document.querySelectorAll('.pergunta').forEach(function (pergunta) {
+            // Loop sobre todas as respostas da pergunta
+            pergunta.querySelectorAll('.resposta').forEach(function (resposta) {
+                var checkbox = resposta.querySelector('input[type="checkbox"]');
+                var respostaLabel = resposta.querySelector('.resposta-label');
+
+                // Remover classes anteriores
+                resposta.classList.remove('resposta-correta', 'resposta-incorreta');
+
+                // Verifica se a resposta está correta
+
+                if (checkbox.getAttribute('data-correta') === 'true') {
+                    resposta.classList.add('resposta-correta');
+                } else {
+                    resposta.classList.add('resposta-incorreta');
+                }
+
+            });
+        });
+    }
+    // UPDATE PAGINA AO CLICAR NA IMAGEM DO ALIEN
+    const futureImage = document.getElementById('future');
+    futureImage.addEventListener('click', () => {
+        updatePageFuture(); // Chamando a função para validar as respostas
+    });
+
+    function updatePageFuture() {
+        window.location.reload(); // Recarrega a página quando a imagem é clicada
+    }
+    /*
+    const limparRespostas = document.getElementById('limpar-respostas');
+    limparRespostas.addEventListener('click', () => {
+        limparResposta(); // Chamando a função para limpar as respostas
+    });
+
+    function limparResposta() {
+        // Desmarcar todos os checkboxes
+        document.querySelectorAll('.resposta input[type="checkbox"]').forEach(function (checkbox) {
+            checkbox.checked = false;
+        });
+
+        // Remover classes de cor
+        document.querySelectorAll('.resposta').forEach(function (resposta) {
+            resposta.classList.remove('resposta-correta', 'resposta-incorreta');
+        });
+    }
+    */
+    const limparRespostasBtn = document.getElementById('limpar-respostas');
+    limparRespostasBtn.addEventListener('click', limparRespostas);
+
+    function limparRespostas() {
+        perguntasCorretas = 0;
+        perguntasIncorretas = 0;
+        perguntasNaoRespondidas = 0;
+
+        const respostas = document.querySelectorAll('input[type="checkbox"]');
+        respostas.forEach(resposta => {
+            resposta.checked = false;
+            const perguntaId = resposta.name;
+            const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
+            respostaLabel.style.color = '';
+        });
+        window.location.reload();
     }
 });
