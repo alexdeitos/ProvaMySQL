@@ -40,10 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
         marcarRespostasCorretas();
     }
 
-    document.getElementById('limpar-respostas').addEventListener('click', function () {
-        limparRespostas();
-    });
-
     const btnMarcarRespostas = document.getElementById('marcar-respostas');
 
     btnMarcarRespostas.addEventListener('click', function () {
@@ -81,39 +77,19 @@ document.addEventListener('DOMContentLoaded', function () {
     function updatePageFuture() {
         window.location.reload(); // Recarrega a página quando a imagem é clicada
     }
-    /*
-    const limparRespostas = document.getElementById('limpar-respostas');
-    limparRespostas.addEventListener('click', () => {
-        limparResposta(); // Chamando a função para limpar as respostas
-    });
 
-    function limparResposta() {
-        // Desmarcar todos os checkboxes
-        document.querySelectorAll('.resposta input[type="checkbox"]').forEach(function (checkbox) {
-            checkbox.checked = false;
-        });
-
-        // Remover classes de cor
-        document.querySelectorAll('.resposta').forEach(function (resposta) {
-            resposta.classList.remove('resposta-correta', 'resposta-incorreta');
-        });
-    }
-    */
     const limparRespostasBtn = document.getElementById('limpar-respostas');
     limparRespostasBtn.addEventListener('click', limparRespostas);
 
     function limparRespostas() {
-        perguntasCorretas = 0;
-        perguntasIncorretas = 0;
-        perguntasNaoRespondidas = 0;
-
-        const respostas = document.querySelectorAll('input[type="checkbox"]');
+        const respostas = document.querySelectorAll('.resposta');
         respostas.forEach(resposta => {
-            resposta.checked = false;
-            const perguntaId = resposta.name;
-            const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
+            resposta.querySelectorAll('input[type="checkbox"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            resposta.classList.remove('resposta-correta', 'resposta-incorreta');
+            const respostaLabel = resposta.querySelector('.resposta-label');
             respostaLabel.style.color = '';
         });
-        window.location.reload();
     }
 });
