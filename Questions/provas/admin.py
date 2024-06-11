@@ -15,7 +15,11 @@ class PerguntaAdmin(admin.ModelAdmin):
 
     def get_nome_prova(self, obj):
         return obj.prova.nome
+    
+    def get_id_prova(self, obj):
+        return obj.prova.id
 
+    get_id_prova.short_description = 'ID da Prova'
     get_nome_prova.short_description = 'Nome da Prova'
 
 admin.site.register(Pergunta, PerguntaAdmin)
