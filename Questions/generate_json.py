@@ -1,16 +1,22 @@
 import json
 import re
+import os
 
 # Define the prova_id
 prova_id = 4
 
+# Caminho completo para o arquivo questions.txt
+current_directory = os.path.dirname(os.path.abspath(__file__))
+questions_file_path = os.path.join(current_directory, 'perguntas.txt')
+
 # Leitura do arquivo de texto
-with open('questions.txt', 'r', encoding='utf-8') as file:
+with open(questions_file_path, 'r', encoding='utf-8') as file:
     data = file.read()
 
 # Regex para capturar cada pergunta e suas respostas
 question_pattern = re.compile(
-    r'Question #\d+\s*\n(.*?)\s*\nA\.\s(.*?)\s*\nB\.\s(.*?)\s*\nC\.\s(.*?)\s*\nD\.\s(.*?)\s*\nCorrect Answer: (\w)',
+    r'Question #(\d+)\s*\n(.*?)\s*\nA\.\s(.*?)\s*\nB\.\s(.*?)\s*\nC\.\s(.*?)\s*\nD\.\s(.*?)'
+    r'(?:\s*\nE\.\s(.*?))?(?:\s*\nF\.\s(.*?))?\s*\nCorrect Answer: ([A-Z,]+)',
     re.DOTALL
 )
 
@@ -22,9 +28,11 @@ resposta_pk = 1
 
 # Processar cada pergunta
 for match in question_pattern.finditer(data):
-    texto = match.group(1).strip()
-    respostas = [match.group(i).strip() for i in range(2, 6)]
-    correta = match.group(6).strip()
+    numero_questao = match.group(1).strip()
+    texto = match.group(2).strip()
+    texto_com_numero = f"{numero_questao}. {texto}"
+    respostas = [match.group(i).strip() for i in range(3, 9) if match.group(i)]
+    corretas = match.group(9).strip().split(',')
 
     # Adicionar pergunta ao JSON
     questions.append({
@@ -32,7 +40,7 @@ for match in question_pattern.finditer(data):
         "pk": pergunta_pk,
         "fields": {
             "prova": prova_id,
-            "texto": texto,
+            "texto": texto_com_numero,
             "imagem": None
         }
     })
@@ -45,7 +53,7 @@ for match in question_pattern.finditer(data):
             "fields": {
                 "pergunta": pergunta_pk,
                 "texto": resposta,
-                "correta": (correta == chr(65 + i))  # 'A' == chr(65), 'B' == chr(66), etc.
+                "correta": chr(65 + i) in corretas  # 'A' == chr(65), 'B' == chr(66), etc.
             }
         })
         resposta_pk += 1
@@ -56,7 +64,8 @@ for match in question_pattern.finditer(data):
 output = questions + answers
 
 # Salvar no arquivo JSON
-with open('questions.json', 'w', encoding='utf-8') as json_file:
+output_file_path = os.path.join(current_directory, 'questions.json')
+with open(output_file_path, 'w', encoding='utf-8') as json_file:
     json.dump(output, json_file, indent=4)
 
 print("Arquivo questions.json gerado com sucesso!")

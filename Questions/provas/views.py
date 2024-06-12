@@ -3,6 +3,7 @@ from django.shortcuts import render, redirect
 from .models import Pergunta, Prova
 from .forms import ProvaSelectForm
 import random
+from django.shortcuts import get_object_or_404
 
 
 def index(request):
@@ -44,3 +45,12 @@ def resultados_prova(request):
         'incorretas': incorretas,
         'nao_respondidas': nao_respondidas,
     })
+
+def excluir_pergunta(request, pergunta_id):
+    pergunta = get_object_or_404(Pergunta, id=pergunta_id)
+    if request.method == 'POST':
+        # Excluir a pergunta
+        pergunta.delete()
+        # Redirecionar de volta para a página de exibição da prova
+        return redirect('exibir_prova', prova_id=pergunta.prova.id)
+    # Se o método da requisição não for POST, renderize uma página de erro ou redirecione para outra página
