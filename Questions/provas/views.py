@@ -4,6 +4,7 @@ from .models import Pergunta, Prova
 from .forms import ProvaSelectForm
 import random
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.decorators import login_required
 
 
 def index(request):
@@ -46,6 +47,7 @@ def resultados_prova(request):
         'nao_respondidas': nao_respondidas,
     })
 
+@login_required
 def excluir_pergunta(request, pergunta_id):
     pergunta = get_object_or_404(Pergunta, id=pergunta_id)
     if request.method == 'POST':

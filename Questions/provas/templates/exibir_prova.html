@@ -17,10 +17,12 @@
     <div id="perguntas">
         {% for pergunta in perguntas %}
         <div class="pergunta">
+            {% if user.is_authenticated %}
             <form action="{% url 'excluir_pergunta' pergunta.id %}" method="post">
                 {% csrf_token %}
                 <button type="submit" class="btn btn-danger">Excluir Pergunta</button>
             </form>
+            {% endif %}
             <h2>{{ pergunta.texto_formatado|safe }}</h2>
             {% if pergunta.imagem %}
             <img src="{{ pergunta.imagem.url }}" alt="Imagem da pergunta">
