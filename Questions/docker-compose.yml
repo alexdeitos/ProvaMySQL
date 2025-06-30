@@ -1,25 +1,30 @@
-version: '3'
-
 services:
   db:
     image: mysql:5.7
     restart: always
     environment:
-      MYSQL_DATABASE: 'django'
-      MYSQL_USER: 'django'
-      MYSQL_PASSWORD: 'django'
-      MYSQL_ROOT_PASSWORD: 'root'
+      MYSQL_DATABASE: django
+      MYSQL_USER: django
+      MYSQL_PASSWORD: django
+      MYSQL_ROOT_PASSWORD: root
     volumes:
       - ./data:/var/lib/mysql
     ports:
-      - '3306:3306'
+      - "3306:3306"
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
   web:
     build: .
     command: python manage.py runserver 0.0.0.0:8000
     volumes:
       - .:/code
     ports:
-      - '8000:8000'
+      - "8000:8000"
     depends_on:
-      - db
+      db:
+        condition: service_healthy
 
