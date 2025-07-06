@@ -33,42 +33,71 @@
     <button type="button" id="limpar-respostas">Limpar</button>
   </form>
 
-  <script>
-  const enviarRespostasBtn = document.getElementById('enviar-respostas');
-  enviarRespostasBtn.addEventListener('click', validarRespostas);
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const enviarRespostasBtn = document.getElementById('enviar-respostas');
+    const limparRespostasBtn = document.getElementById('limpar-respostas');
 
-  const limparRespostasBtn = document.getElementById('limpar-respostas');
-  limparRespostasBtn.addEventListener('click', limparRespostas);
+    if (!enviarRespostasBtn) {
+      console.error('Botão "enviar-respostas" não encontrado!');
+      return;
+    }
+    if (!limparRespostasBtn) {
+      console.error('Botão "limpar-respostas" não encontrado!');
+      return;
+    }
 
-  function validarRespostas(event) {
-    event.preventDefault();
+    enviarRespostasBtn.addEventListener('click', validarRespostas);
+    limparRespostasBtn.addEventListener('click', limparRespostas);
 
-    const respostasMarcadas = document.querySelectorAll('input[type="checkbox"]:checked');
-    const respostasCorretas = document.querySelectorAll('.resposta-label.correta');
+    function validarRespostas(event) {
+      event.preventDefault();
+      console.log('Validando respostas...');
 
-    respostasMarcadas.forEach(resposta => {
-      const respostaLabel = document.getElementById(`resposta-label-${resposta.name}-${resposta.value}`);
-      respostaLabel.style.color = 'red';
-    });
+      let acertos = 0;
+      const perguntas = document.querySelectorAll('h2');
 
-    respostasCorretas.forEach(respostaCorreta => {
-      respostaCorreta.style.color = 'green';
-    });
+      perguntas.forEach(pergunta => {
+        const perguntaId = pergunta.nextElementSibling.querySelector('input').name;
+        const respostasMarcadas = document.querySelectorAll(`input[name="${perguntaId}"]:checked`);
+        const respostasCorretas = document.querySelectorAll(`[id^="resposta-label-${perguntaId}-"].correta`);
 
-    const perguntasRespondidas = respostasMarcadas.length + respostasCorretas.length;
-    const perguntasCorretas = respostasCorretas.length;
+        let correta = true;
+        if (respostasMarcadas.length !== respostasCorretas.length) {
+          correta = false;
+        } else {
+          respostasMarcadas.forEach(marcada => {
+            const labelMarcada = document.getElementById(`resposta-label-${perguntaId}-${marcada.value}`);
+            if (!labelMarcada.classList.contains('correta')) {
+              correta = false;
+            }
+          });
+        }
 
-    alert(`Você acertou ${perguntasCorretas} de um total de ${perguntasRespondidas} perguntas.`);
-  }
+        respostasMarcadas.forEach(resposta => {
+          const respostaLabel = document.getElementById(`resposta-label-${perguntaId}-${resposta.value}`);
+          respostaLabel.style.color = correta ? 'green' : 'red';
+        });
 
-  function limparRespostas(event) {
-    const respostas = document.querySelectorAll('input[type="checkbox"]');
-    respostas.forEach(resposta => {
-      resposta.checked = false;
-      const respostaLabel = document.getElementById(`resposta-label-${resposta.name}-${resposta.value}`);
-      respostaLabel.style.color = '';
-    });
-  }
+        respostasCorretas.forEach(respostaCorreta => {
+          respostaCorreta.style.color = correta ? 'green' : 'red';
+        });
+
+        if (correta) acertos++;
+      });
+
+      alert(`Você acertou ${acertos} de um total de ${perguntas.length} perguntas.`);
+    }
+
+    function limparRespostas(event) {
+      const respostas = document.querySelectorAll('input[type="checkbox"]');
+      respostas.forEach(resposta => {
+        resposta.checked = false;
+        const respostaLabel = document.getElementById(`resposta-label-${resposta.name}-${resposta.value}`);
+        respostaLabel.style.color = '';
+      });
+    }
+  });
 </script>
 
 {% endblock %}
